@@ -16,16 +16,41 @@ const tasks = [
     },
   ];
 
+  //const checkedTask = (task) => tasks[].completed 
 
   function generateList (tasks) {
     for (const task of tasks){
-   
-    ulList.innerHTML += `
-    <li>
-    <p> ${task.name}</p>
-    </li>
- `;
-    }
+
+      if (task.completed === true) {
+        ulList.innerHTML += `
+        <li class="tachado"> 
+        <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''}/>
+        <p> ${task.name}</p>
+        </li>`;
+      } else {
+        ulList.innerHTML += `
+        <li>
+        <input type="checkbox" ${task.completed ? 'checked' : ''}/>
+        <p> ${task.name}</p>
+        </li>
+        `; 
+      }
+      };
+    };
+
+
+function handleClick (event) {
+ //funcion para el checkbox
+ const idList = parseInt(event.target.id);
+ const task = tasks.findIndex((task) => task.id === idList);
+ tasks[task].completed=!tasks[task].completed;
+ //nos quedamos aquí, esto no funciona
 }
 
-  generateList(tasks);
+ulList.addEventListener('click', handleClick); 
+
+
+//hacer un evento al botón check, sobre la lista de tareas (escucha el evento dentro de la lista)
+
+
+generateList(tasks);
