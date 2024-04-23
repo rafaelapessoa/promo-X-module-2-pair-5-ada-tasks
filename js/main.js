@@ -7,18 +7,19 @@ const inputFilter = document.querySelector('.js-text-task-filter');
 const ulList = document.querySelector('.js-list');
 
 const tasks = [
-    { name: 'Recoger setas en el campo', completed: true },
-    { name: 'Comprar pilas', completed: true },
-    { name: 'Poner una lavadora de blancos', completed: true },
+    { name: 'Recoger setas en el campo', completed: true, id:1 },
+    { name: 'Comprar pilas', completed: true, id:2 },
+    { name: 'Poner una lavadora de blancos', completed: true, id:3 },
     {
       name: 'Aprender cómo se realizan las peticiones al servidor en JavaScript',
-      completed: false,
+      completed: false, id: 4
     },
   ];
 
   //const checkedTask = (task) => tasks[].completed 
 
   function generateList (tasks) {
+    ulList.innerHTML = '';
     for (const task of tasks){
 
       if (task.completed === true) {
@@ -30,7 +31,7 @@ const tasks = [
       } else {
         ulList.innerHTML += `
         <li>
-        <input type="checkbox" ${task.completed ? 'checked' : ''}/>
+        <input type="checkbox" id="${task.id}" ${task.completed ? 'checked' : ''}/>
         <p> ${task.name}</p>
         </li>
         `; 
@@ -42,10 +43,15 @@ const tasks = [
 function handleClick (event) {
  //funcion para el checkbox
  const idList = parseInt(event.target.id);
- const task = tasks.findIndex((task) => task.id === idList);
- tasks[task].completed=!tasks[task].completed;
- //nos quedamos aquí, esto no funciona
-}
+ const taskPosition = tasks.findIndex((task) => task.id === idList);
+ console.log(taskPosition);
+ console.log(idList);
+ tasks[taskPosition].completed=!tasks[taskPosition].completed;
+
+ generateList(tasks);
+ 
+};
+
 
 ulList.addEventListener('click', handleClick); 
 
@@ -54,3 +60,20 @@ ulList.addEventListener('click', handleClick);
 
 
 generateList(tasks);
+
+
+const handleClickSearch = (event) => {
+  event.preventDefault();
+  const valueTask = inputFilter.value;
+  console.log(valueTask);
+
+  const filterTask = tasks
+    .filter((eachTask) =>
+      eachTask.name.toLowerCase().includes(valueTask.toLowerCase())
+    );
+
+  generateList(filterTask);
+};
+
+
+search.addEventListener('click', handleClickSearch);
