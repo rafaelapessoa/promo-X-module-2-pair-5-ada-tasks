@@ -6,7 +6,7 @@ const inputAdd = document.querySelector('.js-text-task-add');
 const inputFilter = document.querySelector('.js-text-task-filter');
 const ulList = document.querySelector('.js-list');
 
-const tasks = [
+/*const tasks = [
     { name: 'Recoger setas en el campo', completed: true, id:1 },
     { name: 'Comprar pilas', completed: true, id:2 },
     { name: 'Poner una lavadora de blancos', completed: true, id:3 },
@@ -14,7 +14,31 @@ const tasks = [
       name: 'Aprender cómo se realizan las peticiones al servidor en JavaScript',
       completed: false, id: 4
     },
-  ];
+  ];*/
+
+  let tasks = [];
+
+  function renderTasks(listado) {
+    for (const task of tasks) {
+      ulList.innerHTML += `<p> ${results.name}</p>`;
+    }
+    generateList(tasks);
+  };
+  
+
+  function getDataAPI(){
+    fetch(' https://dev.adalab.es/api/todo')
+    .then((response) => response.json())
+    .then((info) => {
+      listTasks = info;
+      renderTasks(listTasks);
+      console.log(listTasks);   
+   })
+  };
+  
+
+  getDataAPI();
+  
 
   //const checkedTask = (task) => tasks[].completed 
 
