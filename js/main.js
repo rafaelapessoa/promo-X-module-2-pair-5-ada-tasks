@@ -16,32 +16,55 @@ const ulList = document.querySelector('.js-list');
     },
   ];*/
 
+
+  //peticiones al servidor
+  const GITHUB_USER = 'elena-alcaraz';
+  const SERVER_URL = `https://dev.adalab.es/api/todo/${GITHUB_USER}`;
+  
   let tasks = [];
 
-  function renderTasks(listado) {
-    for (const task of tasks) {
-      ulList.innerHTML += `<p> ${results.name}</p>`;
-    }
-    generateList(tasks);
-  };
-  
-
   function getDataAPI(){
-    fetch(' https://dev.adalab.es/api/todo')
+    fetch(SERVER_URL)
     .then((response) => response.json())
-    .then((info) => {
-      listTasks = info;
-      renderTasks(listTasks);
-      console.log(listTasks);   
+    .then((data) => {
+      tasks = data.results;
+      generateList(tasks);
+      console.log(tasks);   
    })
   };
   
-
   getDataAPI();
   
+//agregar una nueva tarea
+const handleNewTask = (event) => {
+  event.preventDefault();
+  // 1. Recoge el nombre de la tarea
+  // 2. Crea un objeto para la nueva tarea
+  const uniqueId = uuidv4();
+  const taskName = inputAdd.value;
+  const newTask = {
+    //mirar cómo dar el ID para que pueda tachar, nos tiene que dar un número entero, sin letras
+    id: uniqueId,
+    name: taskName, // sustituye este string vacío por el nombre de la tarea nueva
+    completed: false,
+  };
+  // 3. Añade la nueva tarea al array de tareas
+  tasks.push(newTask);
+  generateList(tasks);
+  // 4. Vuelve a pintar las tareas
+};
 
-  //const checkedTask = (task) => tasks[].completed 
+  
 
+
+//guardar tarea en el local storage
+const tasksLocalStorage = JSON.parse(localStorage.getItem("tasks"));
+
+//evento para el botón de crear 
+add.addEventListener('click', handleNewTask);
+
+  
+//pintar la lista
   function generateList (tasks) {
     ulList.innerHTML = '';
     for (const task of tasks){
@@ -64,8 +87,9 @@ const ulList = document.querySelector('.js-list');
     };
 
 
+//funcion para el checkbox, tachado
 function handleClick (event) {
- //funcion para el checkbox
+
  const idList = parseInt(event.target.id);
  const taskPosition = tasks.findIndex((task) => task.id === idList);
  console.log(taskPosition);
@@ -80,12 +104,11 @@ function handleClick (event) {
 ulList.addEventListener('click', handleClick); 
 
 
-//hacer un evento al botón check, sobre la lista de tareas (escucha el evento dentro de la lista)
 
 
 generateList(tasks);
 
-
+//buscar tarea en la lista y filtrarla
 const handleClickSearch = (event) => {
   event.preventDefault();
   const valueTask = inputFilter.value;
